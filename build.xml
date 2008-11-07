@@ -1,0 +1,133 @@
+	<project name="db_manager" default="jar" basedir="."> 
+
+	<!-- ===================== Property Definitions =========================== -->
+
+
+	  <property file="build.properties" />
+	  <property name="app.home"          	value="." />
+	  <property name="app.name"          	value="db_manager" />
+	  <property name="src.home"          	value="${app.home}/src"/>
+	  <property name="lib.home"          	value="${app.home}/lib"/>
+		
+	  <property name="build.home"           value="${app.home}/build"/>
+	  <property name="build.home.classes"   value="${build.home}/classes"/>
+	  <property name="build.home.project"       value="${build.home}/project"/>
+	  <property name="build.home.project.lib"       value="${build.home}/project/lib"/>
+
+
+	<!-- ==================== Compilation Classpath =========================== -->
+
+	  <path id="compile.classpath">
+
+	    <!-- The object files for this application -->
+	    <pathelement location="${build.home.classes}"/>
+
+	    <!-- The lib files for this application -->
+	    <fileset dir="${build.home.project.lib}">
+	      <include name="*.jar"/>
+	      <include name="*.zip"/>
+	    </fileset>
+
+	  </path>
+
+	<!-- ==================== "clean-all" Target ============================== -->
+
+	 <target name="clean-all" >
+	    <delete dir="${build.home}"/>
+	 </target>
+
+	<!-- ==================== "prepare" Target ================================ -->
+
+	  <target name="prepare" depends="clean-all">
+	    <mkdir dir="${build.home}"/>
+	  	<mkdir dir="${build.home.project}"/>
+	  	<mkdir dir="${build.home.classes}"/>
+	  	<mkdir dir="${build.home.project.lib}"/>
+	  	
+	  	
+	    <copy    todir="${build.home.project.lib}">
+	      <fileset dir="${lib.home}"/>
+	    </copy>
+	  	
+	  	<copy todir="${build.home}/classes/com/livedoor/dbm/image">
+	  	    <fileset dir="${src.home}/com/livedoor/dbm/image"/>
+	  	 </copy>
+	  	
+	  	<copy todir="${build.home}/classes/com/livedoor/dbm/i18n/resource">
+	  	    <fileset dir="${src.home}/com/livedoor/dbm/i18n/resource"/>
+	  	 </copy>
+	  	
+	  	<copy todir="${build.home.project}">
+	  	    <fileset file="${app.home}/start.bat"/>
+	  	 </copy>
+	  	
+	  	<copy todir="${build.home.project}">
+	  		  	    <fileset file="${app.home}/start.sh"/>
+	  	</copy>
+
+	  	
+	  </target>
+
+	<!-- ==================== "compile" Target ================================ -->
+
+	  <target name="compile" depends="prepare" >
+	    <javac srcdir="${src.home}" destdir="${build.home.classes}" debug="yes" encoding="utf-8">
+	        <classpath refid="compile.classpath"/>
+	    </javac>
+	  </target>
+
+	<!-- ==================== "jar" Target ================================== -->
+
+		<target name="jar" depends="compile">
+			
+			<jar destfile="${build.home.project.lib}/db_manager.jar" basedir="${build.home.classes}">
+					
+					<manifest>
+					<attribute name="Main-class" value="com.livedoor.dbm.DBMMain"/>
+					<attribute name="Class-Path" value="OfficeLnFs_2.3.jar openide.jar openide-loaders.jar org-netbeans-modules-editor.jar org-netbeans-modules-editor-fold.jar org-netbeans-modules-editor-lib.jar org-netbeans-modules-editor-util.jar syntax.jar db2java.jar db2jcc_license_cu.jar db2jcc.jar mysql.jar oracle.jar commons-validator-1.3.0.jar"/>
+					</manifest>
+			</jar>
+			
+		</target>
+	    <target name="javadoc">
+						    <mkdir dir="${build.home.project}/docs/api"/>
+						    <javadoc 
+						       classpathref="compile.classpath"
+						       sourcepath="${src.home}" 
+						       destdir="${build.home.project}/docs/api"
+						       charset="utf-8" 
+						       encoding="utf-8" 
+						       packagenames="*" 
+						       excludepackagenames=""
+						       author="true" 
+						       public="true" 
+						       version="true" 
+						       use="true"
+						       windowtitle="Prapiroon DBA API Reference"
+						       doctitle="Prapiroon DBA  1.0 API Reference"
+						       bottom="Copyright（C） 2006－2007 Livedoor Co.Ltd. All Rights Reserved." >
+						    </javadoc>
+		</target>
+	</project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
